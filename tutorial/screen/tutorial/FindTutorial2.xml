@@ -1,0 +1,173 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+
+<!--<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--        xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"-->
+<!--        default-menu-title="Messages" default-menu-index="1">-->
+
+
+<!--    <transition name="createTutorial">-->
+<!--        <actions>-->
+<!--            <log message="======createTutorial======:${context}"/>-->
+<!--            <service-call name="create#tutorial.Tutorial" in-map="context" out-map="context"/>-->
+<!--        </actions>-->
+<!--        <default-response url="."/>-->
+<!--    </transition>-->
+<!--    <transition name="deleteTutorial">-->
+<!--        <actions>-->
+
+<!--            <log message="======deleteTutorial======:${context}"/>-->
+
+<!--            <service-call name="delete#tutorial.Tutorial" in-map="context" out-map="context"/>-->
+<!--        </actions>-->
+<!--        <default-response url="."/>-->
+<!--    </transition>-->
+<!--    <transition name="updateTutorial">-->
+<!--        <actions>-->
+<!--            <log message="======updateTutorial======:${context}"/>-->
+<!--            <log message="======updateTutorial======:${context?.tutorialId}"/>-->
+<!--            <log message="======updateTutorial======:${context?.value}"/>-->
+
+<!--            <service-call name="update#tutorial.Tutorial" in-map="context" out-map="context" multi="true"/>-->
+<!--        </actions>-->
+<!--        <default-response url="."/>-->
+<!--    </transition>-->
+
+
+
+<!--    <actions>-->
+<!--        <entity-find entity-name="tutorial.Tutorial" list="tutorialList" use-clone="true">-->
+
+
+<!--            <search-form-inputs default-order-by="^tutorialId,value"/></entity-find>-->
+<!--&lt;!&ndash;        <set field="value" from="tutorialList.value.sum()"/>    &ndash;&gt;-->
+<!--    </actions>-->
+<!--    <widgets>-->
+<!--        <container>-->
+<!--            <container-dialog id="CreateMessageDialog" button-text="New Message">-->
+<!--                <form-single name="CreateTutorial" transition="createTutorial">-->
+<!--                    <field name="original">-->
+<!--                        <default-field><text-line size="80" maxlength="255"/></default-field>-->
+<!--                    </field>-->
+<!--                    <field name="locale">-->
+<!--                        <default-field><text-line size="5"/></default-field>-->
+<!--                    </field>-->
+<!--                    <field name="localized">-->
+<!--                        <default-field><text-area rows="5" cols="80"/></default-field>-->
+<!--                    </field>-->
+<!--                    <field name="submitButton"><default-field title="Create"><submit/></default-field></field>-->
+<!--                </form-single>-->
+<!--            </container-dialog>-->
+<!--        </container>-->
+<!--        <form-list name="TutorialList" list="tutorialList" transition="updateTutorial"-->
+<!--                   multi="true">-->
+<!--            <field name="tutorialId">-->
+<!--                <header-field show-order-by="case-insensitive"><text-find hide-options="true" size="15"/></header-field>-->
+<!--                <default-field><display/></default-field>-->
+<!--            </field>-->
+<!--            <field name="value">-->
+<!--                <header-field show-order-by="case-insensitive"><text-find hide-options="true" size="30"/></header-field>-->
+<!--                <default-field><text-area rows="2" cols="60"/></default-field>-->
+<!--            </field>-->
+<!--            <field name="description">-->
+<!--                <header-field show-order-by="case-insensitive"><text-find hide-options="true" size="30"/></header-field>-->
+<!--                <default-field><text-area rows="2" cols="60"/></default-field>-->
+<!--            </field>-->
+<!--            <field name="_useRowSubmit"><default-field><hidden default-value="true"/></default-field></field>-->
+<!--            <field name="_rowSubmit"><default-field title="Update"><check><option key="true" text=" "/></check></default-field></field>-->
+<!--            <field name="delete">-->
+<!--                <header-field title="Find"><submit/></header-field>-->
+<!--                <default-field>-->
+<!--                    <link text="Delete" url="deleteTutorial"/>-->
+<!--                </default-field>-->
+<!--            </field>-->
+<!--            <field name="update">-->
+<!--                <default-field title="Update"><submit/></default-field>-->
+<!--            </field>-->
+<!--        </form-list>-->
+<!--    </widgets>-->
+<!--</screen>-->
+
+
+<form-list name="UpdateEntityFields"
+           list="entityFieldList"
+           transition="updateEntityField" multi="true">
+    <field name="employeeId">
+        <header-field show-order-by="true">
+            <drop-down submit-on-select="true" allow-multiple="true">
+                <option key=" " text="All Employee ID's "/>
+                <entity-options key="${emp?.employeeId}" text="${emp?.employeeId}">
+                    <entity-find entity-name="employee.Employee" list="emp">
+                    </entity-find>
+                </entity-options>
+
+            </drop-down>
+        </header-field>
+        <default-field>
+            <display/>
+        </default-field>
+    </field>
+
+    <field name="employeeAge">
+        <default-field>
+            <text-area rows="1" cols="12"/>
+        </default-field>
+    </field>
+
+
+    <field name="employeeName">
+        <default-field>
+            <text-area rows="1" cols="12"/>
+        </default-field>
+    </field>
+
+    <field name="employeeSalary">
+        <default-field>
+            <text-area rows="1" cols="12"/>
+        </default-field>
+    </field>
+
+    <!-- this field is updating by calling updateEntityField transitions-->
+    <field name="update" show-total="true">
+        <default-field title="Update All" tooltip="Update All the editable fields at once">
+
+            <submit confirmation="Are you sure You want to continue submitting will validate all Changes."
+                    icon="fa fa-pencil-square-o" type="success"/>
+        </default-field>
+
+    </field>
+
+    <!-- If this is uncommented the whole will not work-->
+    <!--
+                    <field name="edit">
+                        <header-field title="Find">
+                            <submit/>
+                        </header-field>
+                        <default-field>
+                            <container-dialog id="UpdateDialog" button-text="Update">
+                                <form-single name="UpdateForm" transition="updateEmployee">
+                                    <field name="age">
+                                        <default-field>
+                                            <text-line size="20"/>
+                                        </default-field>
+                                    </field>
+
+                                    <field name="name">
+                                        <default-field>
+                                            <text-line size="20"/>
+                                        </default-field>
+                                    </field>
+
+
+                                    <field name="submitButton">
+                                        <default-field title="save">
+                                            <submit/>
+                                        </default-field>
+                                    </field>
+                                </form-single>
+                            </container-dialog>
+
+                        </default-field>
+                    </field>
+    -->
+
+</form-list>

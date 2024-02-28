@@ -1,0 +1,34 @@
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/rest-api-3.xsd"
+          name="tutorial" displayName=" tutorial API" version="1.0.0" description="Services for Customer">
+    <resource name="moquiSessionToken" require-authentication="anonymous-view">
+        <method type="get"><service name="tutorial.TutorialServices.get#MoquiSessionToken"/></method>
+    </resource>
+
+    <resource name="tutorialCustomer11" require-authentication="false">
+        <method type="post">
+            <service name="tutorial.TutorialServices.create#Tutorial"/>
+        </method>
+    </resource>
+
+    <resource name="tutorialCustomer12" require-authentication="false">
+        <method type="put">
+            <service name="tutorial.TutorialServices.update#Tutorial"/>
+        </method>
+    </resource>
+
+    <resource name="tutorialCustomer13" require-authentication="false">
+        <method type="delete">
+            <service name="tutorial.TutorialServices.delete#Tutorial"/>
+        </method>
+    </resource>
+    <resource name="tutorialCustomer14" require-authentication="false">
+        <method type="get">
+            <service name="tutorial.TutorialServices.get#Tutorial"/>
+        </method>
+    </resource>
+    <resource name="tutorialCustomer15" require-authentication="false">
+        <method type="get">
+            <service name="tutorial.TutorialServices.get1#Tutorial"/>
+        </method>
+    </resource>
+</resource>

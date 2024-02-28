@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Messages" default-menu-index="1">
+
+<!--in which location will be not acces  in this code -->
+<!--    <transition name="createTutorial">-->
+<!--        <service-call name="tutorial.TutorialServices.create#Tutorial"/>-->
+<!--        <default-response url="."/>-->
+<!--    </transition>-->
+
+
+<!--    THIS IS CORRECT LOCATION -->    
+    <transition name="createTutorial">
+<!--        <actions>-->
+<!--            <log message="======createTutorial======:${context}"/>-->
+<!--            <service-call name="create#tutorial.Tutorial" in-map="context" out-map="context"/>-->
+<!--        </actions>-->
+                    <service-call name="tutorial.TutorialServices.create#Tutorial"/>
+        <default-response url="."/>
+    </transition>
+    <transition name="deleteTutorial">
+        <service-call name="tutorial.TutorialServices.delete#Tutorial"  />
+        <default-response url="."/>
+    </transition>
+    <transition name="updateTutorial">
+<!--        <actions>-->
+<!--            <log message="======updateTutorial======:${context}"/>-->
+<!--            <log message="======updateTutorial======:${context?.tutorialId}"/>-->
+<!--            <log message="======updateTutorial======:${context?.value}"/>-->
+
+<!--            <service-call name="update#tutorial.Tutorial" in-map="context" out-map="context" multi="true"/>-->
+        <service-call name="update#tutorial.Tutorial" multi="true"/>
+<!--        </actions>-->
+        <default-response url="."/>
+    </transition>
+
+<!--    <transition name="createTutorial">-->
+<!--        <actions>-->
+<!--            <log message="======createTutorial======:${context}"/>-->
+<!--            <service-call name="create#tutorial.Tutorial" in-map="context" out-map="context"/>-->
+<!--        </actions>-->
+<!--        <default-response url="."/>-->
+<!--    </transition>-->
+<!--    <transition name="deleteTutorial">-->
+<!--        <actions>-->
+
+<!--            <log message="======deleteTutorial======:${context}"/>-->
+
+<!--            <service-call name="delete#tutorial.Tutorial" in-map="context" out-map="context"/>-->
+<!--        </actions>-->
+<!--        <default-response url="."/>-->
+<!--    </transition>-->
+<!--    <transition name="updateTutorial">-->
+<!--        <actions>-->
+<!--            <log message="======updateTutorial======:${context}"/>-->
+<!--            <log message="======updateTutorial======:${context?.tutorialId}"/>-->
+<!--            <log message="======updateTutorial======:${context?.value}"/>-->
+
+<!--            <service-call name="update#tutorial.Tutorial" in-map="context" out-map="context"/>-->
+<!--        </actions>-->
+<!--        <default-response url="."/>-->
+<!--    </transition>-->
+
+
+    <actions>
+        <entity-find entity-name="tutorial.Tutorial" list="tutorialList" >
+
+
+<!--            <search-form-inputs default-order-by="^tutorialId,value"/></entity-find>-->
+            <search-form-inputs/></entity-find>
+
+<!--        <set field="value" from="tutorialList.value.sum()"/>-->
+    </actions>
+    <widgets>
+        <container>
+        <container-dialog id="CreateTutorialDialog" button-text="Create Tutorial">
+            <form-single name="CreateTutorial" transition="createTutorial">
+<!--                <field name="original">-->
+<!--                    <default-field><text-line size="80" maxlength="255"/></default-field>-->
+<!--                </field>-->
+<!--                <field name="locale">-->
+<!--                    <default-field><text-line size="5"/></default-field>-->
+<!--                </field>-->
+<!--                <field name="localized">-->
+<!--                    <default-field><text-area rows="5" cols="80"/></default-field>-->
+<!--                </field>-->
+                <auto-fields-entity entity-name="tutorial.Tutorial" field-type="edit"/>
+                <field name="submitButton"><default-field title="Create"><submit/></default-field></field>
+            </form-single>
+        </container-dialog>
+    </container>
+
+
+           <widgets>
+
+        <form-list name="ListTutorials" list="tutorialList" transition="updateTutorial" multi="true"
+                   show-csv-button ="true" show-all-button="true" show-pdf-button="true" show-xlsx-button="true">
+<!--            /<auto-fields-entity entity-name="tutorial.Tutorial" field-type="find-display"/>-->
+            <field name="find"><header-field title="Find"><submit/></header-field></field>
+
+            <field name="tutorialId">
+                <header-field show-order-by="true"><text-find hide-options="true" size="12"/></header-field>
+                <default-field><display/></default-field>
+            </field>
+            <field name="description">
+                 <header-field show-order-by="true"><text-find hide-options="true"/></header-field>
+                <default-field><text-area rows="3" cols="100"/></default-field>
+            </field>
+            <field name="value">
+                <header-field show-order-by="true"><text-find hide-options="true"/></header-field>
+                <default-field><text-area rows="3" cols="10"/></default-field>
+            </field>
+            <field name="delete">
+                <default-field>
+                    <link text="delete" url="deleteTutorial">
+<!--                        <parameter name="tutorialId"/><parameter name="value"/>-->
+                    </link>
+                </default-field>
+            </field>
+<!--  IT IS USE FOR CHEAK BOX -->
+<!--            <field name="_useRowSubmit"><default-field><hidden default-value="true"/></default-field></field>-->
+<!--            <field name="_rowSubmit"><default-field title="Update"><check><option key="true" text=" "/></check></default-field></field>-->
+
+
+            <field name="update">
+                <default-field title="Update"><submit/></default-field>
+            </field>
+
+
+<!--            <field name="update">-->
+
+<!--                <default-field>-->
+<!--                    <container-dialog id="UpdateTutorialDialog" button-text="Update Tutorial">-->
+<!--                        <form-single name="UpdateTutorialForm" transition="updateTutorial">-->
+<!--                            <auto-fields-entity entity-name="tutorial.Tutorial" field-type="edit"/>-->
+<!--                            <field name="submitButton"><default-field title="Update"><submit/></default-field></field>-->
+<!--                        </form-single>-->
+<!--                    </container-dialog>-->
+<!--                    <link url="updateTutorial"/>-->
+<!--                    <link text="update" url="updateTutorial"/>-->
+<!--                </default-field>-->
+<!--            </field>-->
+        </form-list>
+<!--               <label text="Sum ==  ${(tutorialList.value).sum()}"/>&ndash;&gt;-->
+           </widgets>
+
+    </widgets>
+</screen>
+
+        <!--        <section name="hello1">-->
+
+<!--            <widgets>-->
+<!--                <form-list name="ListTutorials" list="tutorialList" header-dialog="true" skip-form="true" show-csv-button ="true" show-all-button="true" show-pdf-button="true" show-xlsx-button="true">-->
+<!--                    &lt;!&ndash;            /<auto-fields-entity entity-name="tutorial.Tutorial" field-type="find-display"/>&ndash;&gt;-->
+<!--                    <field name="find"><header-field title="Find"><submit/></header-field></field>-->
+
+<!--                    <field name="tutorialId">-->
+<!--                        <header-field show-order-by="true"><text-find hide-options="true"/></header-field>-->
+<!--                        <default-field><display/></default-field>-->
+<!--                    </field>-->
+<!--                    <field name="description">-->
+<!--                        <header-field show-order-by="true"><text-find hide-options="true"/></header-field>-->
+<!--                        <default-field><text-area rows="3" cols="18"/></default-field>-->
+
+<!--                    </field>-->
+<!--                    <field name="value">-->
+<!--                        <header-field show-order-by="true"><text-find hide-options="true"/></header-field>-->
+<!--                        <default-field><display/></default-field>-->
+<!--                    </field>-->
+<!--                    &lt;!&ndash;       add a button&ndash;&gt;-->
+<!--                    <field name="delete">-->
+
+<!--                        <default-field>-->
+<!--                            <link text="delete" url="deleteTutorial">-->
+
+<!--                            </link>-->
+<!--                        </default-field>-->
+<!--                    </field>-->
+
+
+<!--                    <field name="update">-->
+
+<!--                        <default-field>-->
+<!--&lt;!&ndash;                            <container-dialog id="UpdateTutorialDialog" button-text="Update Tutorial">&ndash;&gt;-->
+<!--                                <form-single name="UpdateTutorialForm" transition="updateTutorial">-->
+<!--&lt;!&ndash;                                    <auto-fields-entity entity-name="tutorial.Tutorial" field-type="edit"/>&ndash;&gt;-->
+<!--                                    <field name="submitButton"><default-field title="Update"><submit/></default-field></field>-->
+<!--                                </form-single>-->
+<!--&lt;!&ndash;                            </container-dialog>&ndash;&gt;-->
+
+<!--                        </default-field>-->
+<!--                    </field>-->
+<!--                </form-list>-->
+<!--        <label text="Sum ==  ${(tutorialList.value).sum()}"/>-->
+<!--            </widgets>-->
+<!--        </section>-->
+<!--        <link url="tutorialLock.xml" text="Send new code ${(tutorialList.value).sum()}" />-->
+
+
+

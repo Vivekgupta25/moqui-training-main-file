@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+    <service verb="create" noun="Tutorial" type="script"
+             location="component://tutorial/service/tutorial/createTutorial.groovy" authenticate="anonymous-all">
+        <in-parameters>
+
+            <auto-parameters entity-name="tutorial.Tutorial" include="all"/>
+<!--            <parameter name="tutorialId" entity-name="tutorial.Tutorial"/>-->
+
+        </in-parameters>
+        <out-parameters>
+<!--            <auto-parameters entity-name="tutorial.Tutorial" include="all" required="false"/>-->
+<!--            <parameter name="tutorialId" entity-name="tutorial.Tutorial" required="false"/>-->
+<!--            <parameter name="description"/>-->
+            <parameter name="tutorialId"/>
+        </out-parameters>
+
+
+    </service>
+<!--        <actions>-->
+<!--            <entity-make-value entity-name="tutorial.Tutorial" value-field="tutorial"/>-->
+<!--            <entity-set value-field="tutorial" include="all"/>-->
+<!--            <if condition="!tutorial.tutorialId">-->
+<!--                <entity-sequenced-id-primary value-field="tutorial"/>-->
+<!--            </if>-->
+<!--            <entity-create value-field="tutorial"/>-->
+<!--        </actions>-->
+
+<!--    <service verb="delete" noun="Tutorial" type="script"-->
+<!--             location="component://tutorial/service/tutorial/deleteTutorial.groovy">-->
+<!--        <in-parameters>-->
+<!--            <auto-parameters entity-name="tutorial.Tutorial" include="all"/>-->
+<!--        </in-parameters>-->
+
+<!--    </service>-->
+
+<service verb="delete" noun="Tutorial" type="inline" authenticate="anonymous-all">
+    <in-parameters>
+        <auto-parameters entity-name="tutorial.Tutorial" include="all"/>
+    </in-parameters>
+    <actions>
+        <log level="info" message="---------hello-----------------------"/>
+        <script>
+            def tutorial = ec.entity.makeValue("tutorial.Tutorial")
+            tutorial.setFields(context, true, null, null)
+
+            tutorial.delete()
+
+        </script>
+    </actions>
+
+</service>
+    <service verb="update" noun="Tutorial" type="script"
+             location="component://tutorial/service/tutorial/updateTutorial.groovy" authenticate="anonymous-all">
+        <in-parameters>
+            <auto-parameters entity-name="tutorial.Tutorial" include="all"/>
+        </in-parameters>
+        <out-parameters>
+            <auto-parameters entity-name="tutorial.Tutorial" include="all"/>
+        </out-parameters>
+    </service>
+    <service verb="get" noun="Tutorial" type="inline" authenticate="anonymous-all">
+        <in-parameters>
+            <auto-parameters include="all"/>
+        </in-parameters>
+        <out-parameters>
+<!--            <auto-parameters include="pk" required="true"/>-->
+            <parameter name="tutorialId"/>
+            <parameter name="description"/>
+<!--            <parameter name="value"/>-->
+        </out-parameters>
+        <actions>
+            <entity-find-one entity-name="tutorial.Tutorial" value-field="tutorial">
+
+            <field-map field-name="tutorialId" from="context.tutorialId"/>
+
+            </entity-find-one>
+            <if condition="tutorial == null "><return error="true" message="In which tutorial id not match from entity"/></if>
+        </actions>
+    </service>
+    <service verb="get1" noun="Tutorial" type="inline" authenticate="anonymous-all">
+        <in-parameters>
+            <auto-parameters entity-name="tutorial.Tutorial" include="all"/>
+        </in-parameters>
+        <out-parameters>
+<!--            <auto-parameters include="all"  required="true"/>-->
+            <parameter name="tutorialList"/>
+<!--                        <parameter name="tutorialId"/>-->
+<!--                        <parameter name="description"/>-->
+<!--                        <parameter name="value"/>-->
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="tutorial.Tutorial" list="tutorialList"/>
+        </actions>
+    </service>
+    <service verb="get" noun="MoquiSessionToken">
+        <out-parameters>
+            <parameter name="moquiSessionToken"/>
+        </out-parameters>
+        <actions>
+            <set field="moquiSessionToken" from="ec.web.sessionToken" />
+        </actions>
+    </service>
+</services>
